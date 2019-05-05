@@ -1,0 +1,12 @@
+server:
+  port: 7400
+
+#spring:
+#  datasource:
+#    url: jdbc:mysql://192.168.229.129:3306/test?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&serverTimezone=UTC&useSSL=false
+#    username: yazheng
+#    password: yazheng123
+#    driver-class-name: com.mysql.jdbc.Driver
+logging:
+  level:
+    root: debug
