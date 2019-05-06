@@ -5,11 +5,11 @@ import cn.njyazheng.domain.User;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +35,28 @@ public class UserController {
         user.setSex(1);
         user.setPassword("b1");
         return user;
+    }
+    @PostMapping
+    public User create(@RequestBody @Valid User user
+                       , BindingResult error
+    ){
+        //加入BindingResult，可进入方法,不加不能进入方法
+        if(error.hasErrors()){
+            error.getAllErrors().stream().forEach(objectError -> {
+                LOGGER.error(((FieldError)objectError).getField()+":"+objectError.getDefaultMessage());
+            });
+        }
+        user.setId(1);
+        return user;
+    }
+    
+    @PutMapping("/{id}")
+    public User modify(@PathVariable String id ,@RequestBody @Valid User user ){
+        user.setUsername("2342342");
+        return user;
+    }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id ){
+       LOGGER.info(id);
     }
 }
