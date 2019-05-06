@@ -38,7 +38,7 @@ public class UserController {
         return user;
     }
     @PostMapping
-    public User create(@RequestBody @Valid @Validated(value = {User.Add.class})User user
+    public User create(@RequestBody  @Validated(value = {User.Add.class})User user
 //                       , BindingResult error
     ){
         //加入BindingResult，可进入方法,不加不能进入方法
