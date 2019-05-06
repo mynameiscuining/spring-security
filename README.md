@@ -41,6 +41,11 @@
 @Valid	该注解主要用于字段为一个包含其他对象的集合或map或数组的字段，或该字段直接为一个其他对象的引用，  
 这样在检查当前对象的同时也会检查该字段所引用的对象   
 
+@Validated 可以配合hibernate validator的group使用,设置哪些方法确定是否要验证hibernate validator的注解   
+ 注意  
+ (1)使用@Validated 没有设置group和非对应group的hibernate validator将不做校验  
+ (2)@Validated和@Valid同时使用,谁在前谁起作用   
+
 
     
 

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,15 +38,15 @@ public class UserController {
         return user;
     }
     @PostMapping
-    public User create(@RequestBody @Valid User user
-                       , BindingResult error
+    public User create(@RequestBody @Valid @Validated(value = {User.Add.class})User user
+//                       , BindingResult error
     ){
         //加入BindingResult，可进入方法,不加不能进入方法
-        if(error.hasErrors()){
-            error.getAllErrors().stream().forEach(objectError -> {
-                LOGGER.error(((FieldError)objectError).getField()+":"+objectError.getDefaultMessage());
-            });
-        }
+//        if(error.hasErrors()){
+//            error.getAllErrors().stream().forEach(objectError -> {
+//                LOGGER.error(((FieldError)objectError).getField()+":"+objectError.getDefaultMessage());
+//            });
+//        }
         user.setId(1);
         return user;
     }

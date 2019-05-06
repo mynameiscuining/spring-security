@@ -10,9 +10,13 @@ public class User {
     public interface ListUeser{};//设置用户数组的视图
     public interface UserDetail extends ListUeser{};//设置用户详细的视图并继承用户的数组视图
     
+    public interface Add{ }
+    public interface Modify{ }
+    
     private  Integer id;
     @NotBlank(message = "用户名不能为空")
     private String username;
+    @NotBlank(message = "密码不能为空",groups = Add.class)
     private String password;
     private Integer sex;
     @Past(message = "生日只能是过去的时间")
