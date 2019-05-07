@@ -9,4 +9,4 @@ server:
 #    driver-class-name: com.mysql.jdbc.Driver
 logging:
   level:
-    root: debug
+    root: info
