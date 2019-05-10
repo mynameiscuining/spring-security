@@ -50,6 +50,14 @@
 ===
 ![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/rest-async.jpg)
 
+**spring-security核心功能:**  
+认证  
+授权  
+攻击防护  
+基本原理:过滤器链  
+![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/security-principle.jpg)
+
+
 
     
 

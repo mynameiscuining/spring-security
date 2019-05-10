@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //springboot2禁用security的方式
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+//@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication
 //开启swagger2
 @EnableSwagger2
 public class WebApplication {
