@@ -19,7 +19,9 @@ public class TimeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         LOGGER.info("-----------------------TimeInterceptor preHandle");
-        LOGGER.info("-----------------------TimeInterceptor Controllername:"+((HandlerMethod)handler).getBean().getClass().getName());
+        if(handler instanceof HandlerMethod ){
+            LOGGER.info("-----------------------TimeInterceptor Controllername:"+((HandlerMethod)handler).getBean().getClass().getName());
+        }
         request.setAttribute("start", LocalTime.now());
         return true;
     }

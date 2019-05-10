@@ -45,6 +45,10 @@
  注意  
  (1)使用@Validated 没有设置group和非对应group的hibernate validator将不做校验  
  (2)@Validated和@Valid同时使用,谁在前谁起作用   
+ 
+异步处理rest服务
+===
+![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/rest-async.jpg)
 
 
     

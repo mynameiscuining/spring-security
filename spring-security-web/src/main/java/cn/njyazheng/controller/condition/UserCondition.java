@@ -1,8 +1,13 @@
 package cn.njyazheng.controller.condition;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UserCondition {
+    @ApiModelProperty("用户名")//封装到对象的属性字段描述--------->swagger2
     private String username;
+    @ApiModelProperty("年龄")//字段描述----------->swagger2
     private Integer age;
+    @ApiModelProperty("地址")//字段描述----------->swagger2
     private String address;
     
     public String getUsername() {

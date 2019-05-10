@@ -3,6 +3,8 @@ package cn.njyazheng.controller;
 import cn.njyazheng.controller.condition.UserCondition;
 import cn.njyazheng.domain.User;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     @GetMapping
     @JsonView(User.ListUeser.class)
+    @ApiOperation(value = "用户查询列表")//方法的描述------swagger2
     public List<User>getUsers(UserCondition userCondition){
         LOGGER.info(userCondition.getAddress());
         List<User>userList=new ArrayList<>();
@@ -29,7 +32,8 @@ public class UserController {
     }
     @GetMapping("/{username}")
     @JsonView(User.UserDetail.class)
-    public User getUser(@PathVariable("username")String username){
+    //
+    public User getUser(@ApiParam(value = "用户名") @PathVariable("username")String username){
         LOGGER.info(username);
         User user=new User();
         user.setUsername(username);

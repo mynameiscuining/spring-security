@@ -10,6 +10,7 @@ server:
 logging:
   level:
     root: info
+    org.springframework: debug
 
 spring:
   servlet:
