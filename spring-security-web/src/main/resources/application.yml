@@ -25,3 +25,8 @@ spring:
       max-file-size: 1MB
       #限制所有文件最大大小
       max-request-size: 10MB
+
+custom:
+  security:
+    browser:
+      login-page: /demo/custom-login.html

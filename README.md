@@ -57,6 +57,11 @@
 基本原理:过滤器链  
 ![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/security-principle.jpg)
 
+自定义认证逻辑  
+1.处理用户信息获取逻辑接口   UserDetailsService  
+2.处理用户校验逻辑接口  UserDetails  
+3.密码加密接口 PasswordEncoder  
+
 
 
     
