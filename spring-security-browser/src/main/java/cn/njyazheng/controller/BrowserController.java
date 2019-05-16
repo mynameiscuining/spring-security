@@ -1,8 +1,10 @@
 package cn.njyazheng.controller;
 
+import cn.njyazheng.config.Browserproperties;
 import cn.njyazheng.controller.vo.UnAuthorized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -25,8 +27,8 @@ public class BrowserController {
     private RequestCache requestCache=new HttpSessionRequestCache();
     private static final Logger logger= LoggerFactory.getLogger(BrowserController.class);
     private RedirectStrategy redirectStrategy=new DefaultRedirectStrategy();
-    @Value("${custom.security.browser.login-page:/login.html}")
-    private String loginPage;
+    @Autowired
+    private Browserproperties browserproperties;
     /**
      * 当需要身份认证时,跳转到这里
      * @param request
@@ -42,7 +44,7 @@ public class BrowserController {
             String target=savedRequest.getRedirectUrl();
             logger.info("---------------------------------------引发请求的跳转是"+target);
             if (StringUtils.endsWithIgnoreCase(target,".html")){
-                redirectStrategy.sendRedirect(request,response,loginPage);
+                redirectStrategy.sendRedirect(request,response,browserproperties.getBrowser().getLoginPage());
             }
         }
         return new UnAuthorized("访问的服务需要身份认证");

@@ -30,3 +30,4 @@ custom:
   security:
     browser:
       login-page: /demo/custom-login.html
+      login-type: REDIRECT

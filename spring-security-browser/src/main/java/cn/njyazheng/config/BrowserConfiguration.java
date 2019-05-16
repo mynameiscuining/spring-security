@@ -1,7 +1,9 @@
 package cn.njyazheng.config;
 
 import cn.njyazheng.auth.CustomAuthFailHandler;
+import cn.njyazheng.auth.CustomAuthFailHandler2;
 import cn.njyazheng.auth.CustomAuthSuccessHandler;
+import cn.njyazheng.auth.CustomAuthSuccessHandler2;
 import cn.njyazheng.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +19,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     //    @Autowired
 //    private CustomUserDetailsService customUserDetailsServic;
-    @Value("${custom.security.browser.login-page:/login.html}")
-    private String loginPage;
     @Autowired
-    private CustomAuthSuccessHandler customAuthSuccessHandler;
+    private Browserproperties browserproperties;
+    
+//    @Autowired
+//    private CustomAuthSuccessHandler customAuthSuccessHandler;
+//    @Autowired
+//    private CustomAuthFailHandler customAuthFailHandler;
     @Autowired
-    private CustomAuthFailHandler customAuthFailHandler;
+    private CustomAuthFailHandler2 customAuthFailHandler;
+    @Autowired
+    private CustomAuthSuccessHandler2 customAuthSuccessHandler;
     
     
     @Bean
@@ -62,7 +69,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
                 // .antMatchers("/login.html").permitAll()
                 .antMatchers("/authentication/require",
                         //设置登录页不认证
-                        loginPage).permitAll()
+                        browserproperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求
                 .anyRequest()
                 //认证
