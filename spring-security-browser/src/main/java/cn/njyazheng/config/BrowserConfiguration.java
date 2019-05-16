@@ -1,5 +1,7 @@
 package cn.njyazheng.config;
 
+import cn.njyazheng.auth.CustomAuthFailHandler;
+import cn.njyazheng.auth.CustomAuthSuccessHandler;
 import cn.njyazheng.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,11 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
 //    private CustomUserDetailsService customUserDetailsServic;
     @Value("${custom.security.browser.login-page:/login.html}")
     private String loginPage;
+    @Autowired
+    private CustomAuthSuccessHandler customAuthSuccessHandler;
+    @Autowired
+    private CustomAuthFailHandler customAuthFailHandler;
+    
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,11 +46,15 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
                 //只要需要认证的页面,就要跳转的url
                 .loginPage("/authentication/require")
                 //登录页认证请求,过滤器UsernamePasswordAuthenticationFilter会进行拦截
-                .loginProcessingUrl("/authentication/form");
-        
+                .loginProcessingUrl("/authentication/form")
+                //设置认证成功后的行为,默认会跳转到原来请求的地址上
+                .successHandler(customAuthSuccessHandler)
+                //设置认证失败后的行为
+                .failureHandler(customAuthFailHandler);
+        //---------------------------------------------------------------------------------------------
         //关闭跨站请求
         http.csrf().disable();
-        
+        //---------------------------------------------------------------------------------------------
         //对任何请求进行认证
         //对请求授权,
         http.authorizeRequests()
