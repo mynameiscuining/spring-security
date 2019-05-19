@@ -57,11 +57,23 @@
 基本原理:过滤器链  
 ![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/security-principle.jpg)
 
-自定义认证逻辑  
+**自定义认证逻辑**  
 1.处理用户信息获取逻辑接口   UserDetailsService  
 2.处理用户校验逻辑接口  UserDetails  
 3.密码加密接口 PasswordEncoder  
 
+**认证流程**  
+1.认证流程处理说明(表单登录为例)  
+  登录请求-->UsernamePasswordAuthenticationFilter(获取请求信息)-->AuthenticationManager(管理AuthenticationProvider)-->
+  AuthenticationProvider(校验)-->UserDetailsService-->UserDetails->Authentication(已认证)  
+2.认证结果如何在多个请求之间共享  
+  Authentication(已认证)-->SecurityContext-->SecurityContextHolder-->
+  SecurityContextPersistenceFilter(过滤器链的最前面,请求进来检查session是否有SecurityContext,有就放到线程里,
+  没有就过,返回是检查线程,有就放在session里)  
+3.获取认证的用户信息  
+  第一种  Authentication=SecurityContextHolder.getContext().getAuthentication()  
+  第二种  Authentication=Controller层直接当做方法参数Authentication  
+  第三种 UserDetails=Controller层直接当做方法参数@AuthenticationPrincipal UserDetails  
 
 
 

@@ -59,6 +59,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
                 //设置认证失败后的行为
                 .failureHandler(customAuthFailHandler);
         //---------------------------------------------------------------------------------------------
+        
         //关闭跨站请求
         http.csrf().disable();
         //---------------------------------------------------------------------------------------------
