@@ -1,7 +1,7 @@
-package cn.njyazheng.auth;
+package cn.njyazheng.core.auth;
 
-import cn.njyazheng.config.Browserproperties;
 import cn.njyazheng.core.LoginType;
+import cn.njyazheng.core.ConfigProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class CustomAuthSuccessHandler2 extends SavedRequestAwareAuthenticationSuccessHandler {
     
     @Autowired
-    private Browserproperties browserproperties;
+    private ConfigProperties configProperties;
     
     @Autowired
     private ObjectMapper objectMapper;
@@ -25,7 +25,7 @@ public class CustomAuthSuccessHandler2 extends SavedRequestAwareAuthenticationSu
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
     
         logger.info("--------------------------登录成功");
-        if (LoginType.JSON.equals(browserproperties.getBrowser().getLoginType())){
+        if (LoginType.JSON.equals(configProperties.getBrowser().getLoginType())){
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(objectMapper.writeValueAsString(authentication));
         }else {

@@ -25,9 +25,20 @@ spring:
       max-file-size: 1MB
       #限制所有文件最大大小
       max-request-size: 10MB
+  #设置session的存储方式
+  session:
+    store-type: none
 
+#自定义配置
 custom:
   security:
     browser:
       login-page: /demo/custom-login.html
-      login-type: REDIRECT
+      login-type: JSON
+    verify:
+      code-params:
+        kaptcha.textproducer.font.size: 30
+        kaptcha.image.width: 180
+        kaptcha.image.height: 40
+
+      code-urls: /user,/user/**

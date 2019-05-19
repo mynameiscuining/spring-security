@@ -10,15 +10,25 @@
     <table>
         <tr>
             <td>用户名:</td>
-            <td><input type="text" name="username"></td>
+            <td><input type="text" name="username" /></td>
         </tr>
         <tr>
             <td>密码:</td>
-            <td><input type="password" name="password"></td>
+            <td><input type="password" name="password" /></td>
+        </tr>
+
+        <tr>
+            <td>验证码:</td>
+            <td>
+                <input style="vertical-align: bottom" type="text" name="imageCode"/>
+                <!--这个地方的高宽优先级最高,其次配置 -->
+                 <img style="vertical-align: bottom" onclick="this.src='/verify/code?time='+new Date().getMilliseconds()" src="/verify/code">
+            </td>
         </tr>
         <tr>
             <td colspan='2'><input name="remember-me" type="checkbox" value="true" />记住我</td>
         </tr>
+
         <tr>
             <td colspan="2"><button type="submit">登录</button></td>
         </tr>

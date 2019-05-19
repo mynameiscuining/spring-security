@@ -1,4 +1,4 @@
-package cn.njyazheng.auth;
+package cn.njyazheng.core.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

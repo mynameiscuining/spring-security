@@ -1,26 +1,24 @@
 package cn.njyazheng.config;
 
-import cn.njyazheng.auth.CustomAuthFailHandler;
-import cn.njyazheng.auth.CustomAuthFailHandler2;
-import cn.njyazheng.auth.CustomAuthSuccessHandler;
-import cn.njyazheng.auth.CustomAuthSuccessHandler2;
-import cn.njyazheng.service.CustomUserDetailsService;
+import cn.njyazheng.core.auth.CustomAuthFailHandler2;
+import cn.njyazheng.core.auth.CustomAuthSuccessHandler2;
+import cn.njyazheng.core.ConfigProperties;
+import cn.njyazheng.core.verify.code.VerificationCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     //    @Autowired
 //    private CustomUserDetailsService customUserDetailsServic;
     @Autowired
-    private Browserproperties browserproperties;
+    private ConfigProperties configProperties;
     
 //    @Autowired
 //    private CustomAuthSuccessHandler customAuthSuccessHandler;
@@ -46,14 +44,22 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //弹出窗alert
         // http.httpBasic();
-        //表单登录,本版本默认方式
-        http.formLogin()
+        //添加验证码拦截器
+        VerificationCodeFilter verificationCodeFilter=new VerificationCodeFilter();
+        verificationCodeFilter.setCustomAuthFailHandler(customAuthFailHandler);
+        verificationCodeFilter.setConfigProperties(configProperties);
+        //处理加载信息
+        verificationCodeFilter.afterPropertiesSet();
+        http.addFilterBefore(verificationCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                //表单登录,本版本默认方式
+                .formLogin()
                 //自定义页面
                 //.loginPage("/login.html")
                 //只要需要认证的页面,就要跳转的url
                 .loginPage("/authentication/require")
                 //登录页认证请求,过滤器UsernamePasswordAuthenticationFilter会进行拦截
                 .loginProcessingUrl("/authentication/form")
+        
                 //设置认证成功后的行为,默认会跳转到原来请求的地址上
                 .successHandler(customAuthSuccessHandler)
                 //设置认证失败后的行为
@@ -68,9 +74,9 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //匹配的url,不需要做认证
                 // .antMatchers("/login.html").permitAll()
-                .antMatchers("/authentication/require",
+                .antMatchers("/authentication/require","/verify/code","/error",
                         //设置登录页不认证
-                        browserproperties.getBrowser().getLoginPage()).permitAll()
+                        configProperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求
                 .anyRequest()
                 //认证

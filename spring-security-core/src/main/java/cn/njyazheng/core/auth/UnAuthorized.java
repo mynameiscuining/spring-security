@@ -1,4 +1,4 @@
-package cn.njyazheng.controller.vo;
+package cn.njyazheng.core.auth;
 
 public class UnAuthorized<T> {
     private T content;
