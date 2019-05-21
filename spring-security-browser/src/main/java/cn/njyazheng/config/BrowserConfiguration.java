@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
+
 
 @Configuration
 public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
@@ -20,7 +26,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private ConfigProperties configProperties;
     
-//    @Autowired
+    //    @Autowired
 //    private CustomAuthSuccessHandler customAuthSuccessHandler;
 //    @Autowired
 //    private CustomAuthFailHandler customAuthFailHandler;
@@ -28,7 +34,23 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     private CustomAuthFailHandler2 customAuthFailHandler;
     @Autowired
     private CustomAuthSuccessHandler2 customAuthSuccessHandler;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private DataSource dataSource;
     
+    
+    @Bean
+    /**
+     * 记住我Cookie的token去和数据库token比对,比对正确获取username,再去等录,获取Userdetails
+     */
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        //启动的时候会创建表
+        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
+    }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,7 +67,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         //弹出窗alert
         // http.httpBasic();
         //添加验证码拦截器
-        VerificationCodeFilter verificationCodeFilter=new VerificationCodeFilter();
+        VerificationCodeFilter verificationCodeFilter = new VerificationCodeFilter();
         verificationCodeFilter.setCustomAuthFailHandler(customAuthFailHandler);
         verificationCodeFilter.setConfigProperties(configProperties);
         //处理加载信息
@@ -59,13 +81,19 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/authentication/require")
                 //登录页认证请求,过滤器UsernamePasswordAuthenticationFilter会进行拦截
                 .loginProcessingUrl("/authentication/form")
-        
+                
                 //设置认证成功后的行为,默认会跳转到原来请求的地址上
                 .successHandler(customAuthSuccessHandler)
                 //设置认证失败后的行为
                 .failureHandler(customAuthFailHandler);
         //---------------------------------------------------------------------------------------------
-        
+        //记住我
+        http.rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(configProperties.getRememberMeSeconds())
+                //拿到username后去做登录
+                .userDetailsService(userDetailsService);
+        //---------------------------------------------------------------------------------------------
         //关闭跨站请求
         http.csrf().disable();
         //---------------------------------------------------------------------------------------------
@@ -74,7 +102,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //匹配的url,不需要做认证
                 // .antMatchers("/login.html").permitAll()
-                .antMatchers("/authentication/require","/verify/code","/error",
+                .antMatchers("/authentication/require", "/verify/code", "/error",
                         //设置登录页不认证
                         configProperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求

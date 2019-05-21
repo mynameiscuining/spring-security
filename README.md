@@ -149,6 +149,11 @@
 			<td>session date</td>
 			<td>KAPTCHA_SESSION_DATE</td>
 		</tr></tbody></table>  
+		
+**REMEMBER_ME** 
+![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/rememberme.jpg)  
+
+
 
 
 
