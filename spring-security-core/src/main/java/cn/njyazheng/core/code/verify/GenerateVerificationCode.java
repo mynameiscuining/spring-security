@@ -1,4 +1,6 @@
-package cn.njyazheng.core.verify.code;
+package cn.njyazheng.core.code.verify;
+
+
 
 import javax.servlet.http.HttpServletRequest;
 

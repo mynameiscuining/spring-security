@@ -1,7 +1,10 @@
 package cn.njyazheng.controller;
 
-import cn.njyazheng.core.verify.code.GenerateVerificationCode;
-import cn.njyazheng.core.verify.code.VerificationCode;
+import cn.njyazheng.core.code.sms.GenerateSmsCode;
+import cn.njyazheng.core.code.sms.SmsCode;
+import cn.njyazheng.core.code.sms.SmsCodeSender;
+import cn.njyazheng.core.code.verify.GenerateVerificationCode;
+import cn.njyazheng.core.code.verify.VerificationCode;
 import cn.njyazheng.core.browser.SessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +32,16 @@ public class VerificationCodeController {
     @Autowired
     private GenerateVerificationCode generateVerificationCode;
     
+    @Autowired
+    private GenerateSmsCode generateSmsCodeCode;
+    @Autowired
+    private SmsCodeSender smsCodeSender;
+    
+    
     @GetMapping("/verify/code")
     public ResponseEntity<byte[]> code(HttpServletRequest request)throws Exception{
         //把随机数放进session
-        VerificationCode verificationCode = generateVerificationCode.generate(request);
+        VerificationCode verificationCode =  generateVerificationCode.generate(request);
         request.getSession().setAttribute(SessionKey.SESSION_KEY_VERIFY_CODE,verificationCode);
         HttpStatus statusCode = HttpStatus.OK;
         
@@ -50,5 +59,15 @@ public class VerificationCodeController {
             e.printStackTrace();
         }
         return  response;
+    }
+    
+    @GetMapping("/sms/code")
+    public Result smscode(String mobile, HttpServletRequest request)throws Exception{
+        //把随机数放进session
+        SmsCode smsCode =  generateSmsCodeCode.generate(request);
+        request.getSession().setAttribute(SessionKey.SESSION_KEY_SMS_CODE,smsCode);
+        System.out.println(mobile);
+        smsCodeSender.send(request.getParameter("mobile"),smsCode.getCode());
+        return new Result(200);
     }
 }

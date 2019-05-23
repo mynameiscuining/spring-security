@@ -1,4 +1,4 @@
-package cn.njyazheng.core.verify.code;
+package cn.njyazheng.core.code.verify;
 
 import cn.njyazheng.core.ConfigProperties;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -37,7 +37,7 @@ public class GenerateVerificationCodeImpl implements GenerateVerificationCode {
         String code = defaultKaptcha.createText();
         verificationCode.setCode(code);
         verificationCode.setBufferedImage(defaultKaptcha.createImage(code));
-        verificationCode.setExpireTime(LocalDateTime.now().plusMinutes(5));
+        verificationCode.setExpireTime(LocalDateTime.now().plusMinutes(configProperties.getVerify().getExpire()));
         return verificationCode;
     }
     private void setDefault(String key,Properties properties,Pattern digit){

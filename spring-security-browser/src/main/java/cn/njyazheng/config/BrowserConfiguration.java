@@ -3,7 +3,7 @@ package cn.njyazheng.config;
 import cn.njyazheng.core.auth.CustomAuthFailHandler2;
 import cn.njyazheng.core.auth.CustomAuthSuccessHandler2;
 import cn.njyazheng.core.ConfigProperties;
-import cn.njyazheng.core.verify.code.VerificationCodeFilter;
+import cn.njyazheng.core.code.verify.VerificationCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,8 +47,9 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
-        //启动的时候会创建表
-        jdbcTokenRepository.setCreateTableOnStartup(true);
+        //启动的时候会创建表,只能第一次使用
+        //jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
     
@@ -102,7 +103,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //匹配的url,不需要做认证
                 // .antMatchers("/login.html").permitAll()
-                .antMatchers("/authentication/require", "/verify/code", "/error",
+                .antMatchers("/authentication/require", "/verify/code","/sms/code","/error","/js/**.js",
                         //设置登录页不认证
                         configProperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求

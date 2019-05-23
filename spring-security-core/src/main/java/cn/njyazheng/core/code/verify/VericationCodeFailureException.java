@@ -1,4 +1,4 @@
-package cn.njyazheng.core.verify.code;
+package cn.njyazheng.core.code.verify;
 
 import org.springframework.security.core.AuthenticationException;
 
