@@ -1,8 +1,10 @@
-package cn.njyazheng.core.code.sms;
+package cn.njyazheng.core.code;
 
 import cn.njyazheng.core.browser.SessionKey;
 import cn.njyazheng.core.code.AbstractCheckCodeProcessor;
-import cn.njyazheng.core.code.sms.SmsCode;
+import cn.njyazheng.core.code.sms.generate.GenerateSmsCode;
+import cn.njyazheng.core.code.sms.generate.SmsCode;
+import cn.njyazheng.core.code.sms.generate.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;

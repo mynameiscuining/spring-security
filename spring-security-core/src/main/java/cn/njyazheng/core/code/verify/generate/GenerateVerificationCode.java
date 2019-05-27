@@ -1,4 +1,4 @@
-package cn.njyazheng.core.code.verify;
+package cn.njyazheng.core.code.verify.generate;
 
 
 

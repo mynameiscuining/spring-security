@@ -1,4 +1,4 @@
-package cn.njyazheng.core.code.verify;
+package cn.njyazheng.core.code.verify.generate;
 
 import cn.njyazheng.core.ConfigProperties;
 import com.google.code.kaptcha.impl.DefaultKaptcha;

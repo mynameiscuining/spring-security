@@ -1,7 +1,9 @@
-package cn.njyazheng.core.code.verify;
+package cn.njyazheng.core.code;
 
 import cn.njyazheng.core.browser.SessionKey;
 import cn.njyazheng.core.code.AbstractCheckCodeProcessor;
+import cn.njyazheng.core.code.verify.generate.GenerateVerificationCode;
+import cn.njyazheng.core.code.verify.generate.VerificationCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -11,7 +13,7 @@ import javax.imageio.ImageIO;
 @Component("verificationCodeProcessor")
 public class VerificationCodeProcessor extends AbstractCheckCodeProcessor<VerificationCode> {
     @Autowired
-    private  GenerateVerificationCode generateVerificationCode;
+    private GenerateVerificationCode generateVerificationCode;
     
     @Override
     protected void save(ServletWebRequest servletWebRequest, VerificationCode validateCode) {

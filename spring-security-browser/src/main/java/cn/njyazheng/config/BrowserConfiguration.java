@@ -3,7 +3,9 @@ package cn.njyazheng.config;
 import cn.njyazheng.core.auth.CustomAuthFailHandler2;
 import cn.njyazheng.core.auth.CustomAuthSuccessHandler2;
 import cn.njyazheng.core.ConfigProperties;
-import cn.njyazheng.core.code.verify.VerificationCodeFilter;
+import cn.njyazheng.core.code.sms.auth.SmsCodeAuthenticatiionConfiguration;
+import cn.njyazheng.core.code.sms.auth.SmsCodeFilter;
+import cn.njyazheng.core.code.verify.auth.VerificationCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +40,8 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private SmsCodeAuthenticatiionConfiguration smsCodeAuthenticatiionConfiguration;
     
     
     @Bean
@@ -71,9 +75,18 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         VerificationCodeFilter verificationCodeFilter = new VerificationCodeFilter();
         verificationCodeFilter.setCustomAuthFailHandler(customAuthFailHandler);
         verificationCodeFilter.setConfigProperties(configProperties);
+        
+        
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setCustomAuthFailHandler(customAuthFailHandler);
+        smsCodeFilter.setConfigProperties(configProperties);
+        
         //处理加载信息
         verificationCodeFilter.afterPropertiesSet();
+        smsCodeFilter.afterPropertiesSet();
+        
         http.addFilterBefore(verificationCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 //表单登录,本版本默认方式
                 .formLogin()
                 //自定义页面
@@ -103,12 +116,15 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //匹配的url,不需要做认证
                 // .antMatchers("/login.html").permitAll()
-                .antMatchers("/authentication/require", "/verify/code","/sms/code","/error","/js/**.js",
+                .antMatchers("/authentication/require", "/verify/code", "/sms/code", "/error", "/js/**.js","/authentication/mobile",
                         //设置登录页不认证
                         configProperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求
                 .anyRequest()
                 //认证
                 .authenticated();
+        //---------------------------------------------------------------------------------------------
+        http.apply(smsCodeAuthenticatiionConfiguration);
+        
     }
 }

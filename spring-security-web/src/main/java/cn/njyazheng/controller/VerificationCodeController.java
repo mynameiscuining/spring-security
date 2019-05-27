@@ -1,10 +1,10 @@
 package cn.njyazheng.controller;
 
-import cn.njyazheng.core.code.sms.GenerateSmsCode;
-import cn.njyazheng.core.code.sms.SmsCode;
-import cn.njyazheng.core.code.sms.SmsCodeSender;
-import cn.njyazheng.core.code.verify.GenerateVerificationCode;
-import cn.njyazheng.core.code.verify.VerificationCode;
+import cn.njyazheng.core.code.sms.generate.GenerateSmsCode;
+import cn.njyazheng.core.code.sms.generate.SmsCode;
+import cn.njyazheng.core.code.sms.generate.SmsCodeSender;
+import cn.njyazheng.core.code.verify.generate.GenerateVerificationCode;
+import cn.njyazheng.core.code.verify.generate.VerificationCode;
 import cn.njyazheng.core.browser.SessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

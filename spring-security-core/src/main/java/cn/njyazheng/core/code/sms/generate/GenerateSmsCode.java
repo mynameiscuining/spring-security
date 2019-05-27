@@ -1,4 +1,4 @@
-package cn.njyazheng.core.code.sms;
+package cn.njyazheng.core.code.sms.generate;
 
 
 

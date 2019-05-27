@@ -1,8 +1,10 @@
-package cn.njyazheng.core.code.verify;
+package cn.njyazheng.core.code.sms.auth;
 
-import cn.njyazheng.core.auth.CustomAuthFailHandler2;
 import cn.njyazheng.core.ConfigProperties;
+import cn.njyazheng.core.auth.CustomAuthFailHandler2;
 import cn.njyazheng.core.browser.SessionKey;
+import cn.njyazheng.core.code.sms.generate.SmsCode;
+import cn.njyazheng.core.code.verify.auth.VericationCodeFailureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,8 +23,8 @@ import java.util.Set;
 
 //OncePerRequestFilter保证过滤器只被调用一次
 //InitializingBean等相应的参数初始化完成之后再来初始化本类
-public class VerificationCodeFilter extends OncePerRequestFilter implements InitializingBean {
-    private static final Logger logger = LoggerFactory.getLogger(VerificationCodeFilter.class);
+public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean {
+    private static final Logger logger = LoggerFactory.getLogger(SmsCodeFilter.class);
     private CustomAuthFailHandler2 customAuthFailHandler;
     private ConfigProperties configProperties;
     private Set<String> codeUrls;
@@ -36,8 +38,8 @@ public class VerificationCodeFilter extends OncePerRequestFilter implements Init
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        codeUrls = configProperties.getVerify().getCodeUrls();
-        codeUrls.add("/authentication/form");
+        codeUrls = configProperties.getSms().getCodeUrls();
+        codeUrls.add("/authentication/mobile");
         
     }
     
@@ -61,19 +63,22 @@ public class VerificationCodeFilter extends OncePerRequestFilter implements Init
     }
     
     private void validateCode(HttpServletRequest httpServletRequest) throws VericationCodeFailureException {
-        String code = httpServletRequest.getParameter("imageCode");
+        String code = httpServletRequest.getParameter("mobileCode");
         if (StringUtils.isEmpty(code)) {
-            throw new VericationCodeFailureException("请输入验证码");
+            throw new VericationCodeFailureException("请输入短信动态码");
         }
         HttpSession session = httpServletRequest.getSession();
-        VerificationCode verificationCode = (VerificationCode) session.getAttribute(SessionKey.SESSION_KEY_VERIFY_CODE);
+        SmsCode verificationCode = (SmsCode) session.getAttribute(SessionKey.SESSION_KEY_SMS_CODE);
+        if(verificationCode==null){
+            throw new VericationCodeFailureException("请获取短信动态码");
+        }
         if (verificationCode.isExpire()) {
-            throw new VericationCodeFailureException("验证码已过期");
+            throw new VericationCodeFailureException("短信动态码已过期");
         }
         if (!code.trim().equalsIgnoreCase(verificationCode.getCode())) {
-            throw new VericationCodeFailureException("请输入正确验证码");
+            throw new VericationCodeFailureException("请输入正确短信动态码");
         }
-        session.removeAttribute(SessionKey.SESSION_KEY_VERIFY_CODE);
+        session.removeAttribute(SessionKey.SESSION_KEY_SMS_CODE);
     }
     
     public CustomAuthFailHandler2 getCustomAuthFailHandler() {

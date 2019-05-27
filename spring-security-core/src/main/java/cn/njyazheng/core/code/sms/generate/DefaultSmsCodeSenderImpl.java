@@ -1,4 +1,4 @@
-package cn.njyazheng.core.code.sms;
+package cn.njyazheng.core.code.sms.generate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,9 +1,8 @@
 package cn.njyazheng.core;
 
 import cn.njyazheng.core.browser.BrowserConfigProperties;
-import cn.njyazheng.core.code.sms.SmsCode;
-import cn.njyazheng.core.code.sms.SmsCodeProperties;
-import cn.njyazheng.core.code.verify.VerificationCodeProperties;
+import cn.njyazheng.core.code.sms.generate.SmsCodeProperties;
+import cn.njyazheng.core.code.verify.generate.VerificationCodeProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

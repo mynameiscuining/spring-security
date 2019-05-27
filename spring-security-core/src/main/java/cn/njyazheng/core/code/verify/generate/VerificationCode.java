@@ -1,6 +1,6 @@
-package cn.njyazheng.core.code.verify;
+package cn.njyazheng.core.code.verify.generate;
 
-import cn.njyazheng.core.code.sms.SmsCode;
+import cn.njyazheng.core.code.sms.generate.SmsCode;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
