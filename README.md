@@ -150,8 +150,35 @@
 			<td>KAPTCHA_SESSION_DATE</td>
 		</tr></tbody></table>  
 		
-**REMEMBER_ME** 
+**REMEMBER_ME**   
 ![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/rememberme.jpg)  
+
+OAuth  
+===
+四种授权模式:  
+1.授权码模式  
+2.简化模式  
+3.密码模式  
+4.客户端模式  
+
+权限
+===
+**权限流程**  
+1.FilterSecurityInterceptor 过滤器链上最后的过滤器,判断经过前面的过滤器链后的请求能否能访问到后面的资源  
+也是授权判断流程的主入口   
+2.AccessDecisionManager是一个接口,AbstractAccessDecisionManager抽象实现,管理一组AccessDecisionVector  
+每个AccessDecisionVector的逻辑是对请求的投票,通过还是不过过,最终过不过还是由AbstractAccessDecisionManager  
+的实现确定  
+3.AffirmativeBased,ConsensusBased,UnanimousBased是AbstractAccessDecisionManager3个实现逻辑  
+AffirmativeBased(Security默认使用)只要有一个AccessDecisionVector通过,就通过  
+ConsensusBased 比较AccessDecisionVector的投票个数,由投票数大的确定  
+UnanimousBased只要有一个AccessDecisionVector不通过,就会不通过  
+4.spring-security3之后,在web环境下,Vector都由一个WebExpressVector处理
+![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/role.jpg)  
+**权限表达式**  
+![Image text](https://raw.githubusercontent.com/mynameiscuining/spring-security/master/express_role.jpg) 
+
+
 
 
 
