@@ -3,6 +3,7 @@ package cn.njyazheng.config;
 import cn.njyazheng.core.auth.CustomAuthFailHandler2;
 import cn.njyazheng.core.auth.CustomAuthSuccessHandler2;
 import cn.njyazheng.core.ConfigProperties;
+import cn.njyazheng.core.auth.config.AuthorizedConfigManager;
 import cn.njyazheng.core.code.sms.auth.SmsCodeAuthenticatiionConfiguration;
 import cn.njyazheng.core.code.sms.auth.SmsCodeFilter;
 import cn.njyazheng.core.code.verify.auth.VerificationCodeFilter;
@@ -42,7 +43,8 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     @Autowired
     private SmsCodeAuthenticatiionConfiguration smsCodeAuthenticatiionConfiguration;
-    
+    @Autowired
+    private AuthorizedConfigManager authorizedConfigManager;
     
     @Bean
     /**
@@ -113,16 +115,7 @@ public class BrowserConfiguration extends WebSecurityConfigurerAdapter {
         //---------------------------------------------------------------------------------------------
         //对任何请求进行认证
         //对请求授权,
-        http.authorizeRequests()
-                //匹配的url,不需要做认证
-                // .antMatchers("/login.html").permitAll()
-                .antMatchers("/authentication/require", "/verify/code", "/sms/code", "/error", "/js/**.js","/authentication/mobile",
-                        //设置登录页不认证
-                        configProperties.getBrowser().getLoginPage()).permitAll()
-                //任何请求
-                .anyRequest()
-                //认证
-                .authenticated();
+        authorizedConfigManager.config(http.authorizeRequests());
         //---------------------------------------------------------------------------------------------
         http.apply(smsCodeAuthenticatiionConfiguration);
         
